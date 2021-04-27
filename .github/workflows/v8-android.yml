@@ -61,27 +61,9 @@ jobs:
         export PATH="$PATH:$PWD/depot_tools"
         ls -la 
         pwd
+        echo $HOME
         cd /home/runner/work/v8-android/v8-android/v8/v8
         ls -la
-        python /home/runner/work/v8-android/v8-android/v8/v8/tools/dev/gm.py android_arm64.release.checkall
-    - name: pack v8
-      run: |
-        cd /home/runner/work/v8-android/v8-android/v8/v8
-        ls
-        tar -cjf v8-android.tar.bz2 out/
-    - name: Get current date
-      id: date
-      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-    - name: Test with environment variables
-      run: echo $TAG_NAME - $RELEASE_TIME
-      env:
-          TAG_NAME: v8-android
-          RELEASE_TIME: ${{ steps.date.outputs.date }}
-    - name: Release v8 
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: "/home/runner/work/v8-android/v8-android/v8/v8/v8-android.tar.gz"
-        tag: v8-android-${{ steps.date.outputs.date }}
-        token: ${{ secrets.RELEASE_TOKEN }}
-        allowUpdates: true
-       
+        python /home/runner/work/v8-android/v8-android/v8/v8/tools/dev/v8gen.py --help
+        python /home/runner/work/v8-android/v8-android/v8/v8/tools/dev/v8gen.py list
+        gn args out/foo --list
